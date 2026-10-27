@@ -1,0 +1,300 @@
+:root {
+  --bg: #c9d1db;
+  --page: rgb(255 255 255 / 0.35);
+  --card: rgb(255 255 255 / 0.6);
+  --card-solid: #fff;
+  --text: #111;
+  --muted: #555;
+  --radius: 1.25rem;
+  --shadow: 0 8px 30px rgb(0 0 0 / 0.08);
+  --gutter: 16px;
+  --page-width: 34rem;
+  --nav-height: 3rem;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* A nav fixa não cobre o topo da seção ao clicar nos links */
+section, footer { scroll-margin-top: calc(var(--nav-height) + 1.5rem); }
+
+/* Controles: toque sem atraso, sem seleção de texto ao segurar */
+a, button {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+a { color: inherit; }
+
+/* Nav em pílula */
+.nav {
+  position: fixed;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  left: 50%;
+  z-index: 10;
+  transform: translateX(-50%);
+  display: flex;
+  gap: clamp(1.25rem, 6vw, 2.5rem);
+  padding: 0.5rem 1.75rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.nav a { text-decoration: none; }
+
+/* Coluna central */
+.page {
+  width: min(100% - 2 * var(--gutter), var(--page-width));
+  margin: calc(var(--nav-height) + 1.5rem + env(safe-area-inset-top, 0px)) auto calc(2rem + env(safe-area-inset-bottom, 0px));
+  padding: 0 0 2rem;
+  border-radius: var(--radius);
+  background: var(--page);
+}
+
+.card {
+  margin: 0 0.75rem 1rem;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  background: var(--card);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+}
+
+.card--solid {
+  margin: 0 0 1rem;
+  background: var(--card-solid);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem clamp(1.25rem, 5vw, 2rem);
+}
+
+.logo {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Ícones das redes */
+.socials {
+  display: flex;
+  gap: clamp(0.25rem, 2vw, 0.75rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.socials__link {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 120ms var(--ease-out);
+}
+
+.socials__link:active { transform: scale(0.94); background: rgb(0 0 0 / 0.08); }
+.socials__link svg { width: 1.25rem; height: 1.25rem; }
+
+.socials--large { gap: 1.5rem; justify-content: center; }
+.socials--large .socials__link { width: 3rem; height: 3rem; }
+.socials--large .socials__link svg { width: 2rem; height: 2rem; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }
+
+/* Rodapé de contato */
+.contact {
+  width: fit-content;
+  max-width: calc(100% - 1.5rem);
+  margin: 1.5rem auto 0;
+  padding: 0.75rem 2.5rem 1rem;
+  border-radius: 2rem;
+  background: rgb(255 255 255 / 0.75);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.contact__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Aviso "Copied!" do Discord */
+.toast {
+  position: fixed;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  z-index: 20;
+  margin: 0;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: #fff;
+  font-size: 0.875rem;
+  transform: translate(-50%, 1rem);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.toast.is-visible { transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out); }
+
+.toast.is-visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+  user-select: all;
+}
+
+/* Vídeos (cor de placeholder até ter src/poster) */
+.media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  background: #d4a43a;
+}
+
+/* Antes/Depois */
+.compare__phrase {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+}
+
+.compare__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 8vw, 3rem);
+  max-width: 20rem;
+  margin: 0 auto;
+}
+
+.compare__item { margin: 0; text-align: center; }
+.compare__item .media { box-shadow: 0 0 2rem rgb(212 164 58 / 0.6); }
+.compare__item figcaption { margin-top: 0.5rem; font-size: 0.875rem; }
+
+/* Carrossel */
+.work { --item-w: clamp(7rem, 34vw, 10rem); padding-inline: 0; }
+
+.carousel { position: relative; }
+
+.carousel__track {
+  position: relative;
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.5rem calc(50% - var(--item-w) / 2);
+  overflow-x: auto;
+  overscroll-behavior-x: contain; /* não dispara o "voltar" do navegador ao chegar na ponta */
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  list-style: none;
+}
+
+.carousel__track::-webkit-scrollbar { display: none; }
+
+.carousel__item {
+  flex: 0 0 var(--item-w);
+  scroll-snap-align: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 250ms var(--ease-out), opacity 250ms var(--ease-out);
+}
+
+.carousel__item .media { background: #949494; }
+
+.carousel__title, .carousel__subtitle { overflow-wrap: anywhere; }
+.carousel__title { margin: 0.5rem 0 0; font-size: 0.875rem; font-weight: 500; }
+.carousel__subtitle { margin: 0; color: var(--muted); font-size: 0.625rem; }
+
+/* Só com JS: item central em destaque */
+.carousel.is-ready .carousel__item:not(.is-active) { transform: scale(0.72); opacity: 0.7; }
+.carousel.is-ready .carousel__item:not(.is-active) :is(.carousel__title, .carousel__subtitle) { visibility: hidden; }
+
+.carousel__arrow {
+  position: absolute;
+  top: 40%;
+  z-index: 1;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.85);
+  box-shadow: var(--shadow);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 120ms var(--ease-out), opacity 150ms ease;
+}
+
+.carousel__arrow--prev { left: 0.5rem; }
+.carousel__arrow--next { right: 0.5rem; }
+.carousel__arrow:active:not(:disabled) { transform: scale(0.94); }
+.carousel__arrow:disabled { opacity: 0.3; cursor: default; }
+
+/* Em tela de toque se desliza com o dedo; setas só atrapalham */
+@media (hover: none) and (pointer: coarse) {
+  .carousel__arrow { display: none; }
+}
+
+/* About */
+.about__title { margin: 0 0 0.5rem; font-size: 1rem; font-weight: 500; }
+.about p { margin: 0; color: var(--muted); font-size: 0.875rem; }
+
+/* Hover só onde existe mouse (no toque ele "gruda" depois do tap) */
+@media (hover: hover) and (pointer: fine) {
+  .nav a:hover { text-decoration: underline; }
+  .socials__link:hover { background: rgb(0 0 0 / 0.06); }
+}
+
+/* Movimento reduzido: sem deslocamento, só troca de opacidade/cor */
+@media (prefers-reduced-motion: reduce) {
+  .carousel__item, .carousel__arrow, .socials__link { transition-property: opacity, background-color; }
+  .toast, .toast.is-visible { transform: translate(-50%, 0); transition-property: opacity; }
+}
