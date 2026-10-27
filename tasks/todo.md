@@ -37,7 +37,7 @@ Verificação local de todas: `python -m http.server 8000` → http://localhost:
   - Verify: percorrer as 7 larguras no DevTools.
   - Files: `index.html`, `assets/css/style.css`
 
-- [ ] **8. Acabamento e publicação**
+- [x] **8. Acabamento e publicação**
   - Acceptance: `meta description`, tags Open Graph (preview ao mandar o link), favicon; Lighthouse mobile com Performance ≥ 85, Accessibility ≥ 95 e Best Practices ≥ 95; GitHub Pages configurado (`main`, `/ (root)`) com HTTPS em `donecass.com`.
   - Verify: Lighthouse; abrir https://donecass.com num celular de verdade.
   - Files: `index.html`, `assets/img/favicon.svg`
