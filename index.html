@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/style.css?v=5">
-  <script src="assets/js/main.js?v=5" defer></script>
+  <link rel="stylesheet" href="assets/css/style.css?v=6">
+  <script src="assets/js/main.js?v=6" defer></script>
 </head>
 <body>
   <!-- Ícones usados no header e no rodapé -->
@@ -125,8 +125,15 @@
               <span class="visually-hidden">Adobe After Effects</span>
             </li>
             <li title="CapCut">
-              <!-- shortcut: o CapCut não está no simple-icons; ícone desenhado à mão, troque pelo oficial se quiser -->
-              <svg class="tools__icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="5.5" fill="#000"/><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" d="M17.5 7.5H7.5v9h10M7.5 7.5l10 4.5-10 4.5"/></svg>
+              <!-- Mesmo quadrado dos ícones da Adobe (24×23.4, cantos 4.25); marca redesenhada da logo oficial -->
+              <svg class="tools__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <clipPath id="capcut-clip"><rect width="568" height="600"/></clipPath>
+                <rect y="0.3" width="24" height="23.4" rx="4.25" fill="#000"/>
+                <g transform="translate(12 12) scale(0.028) translate(-300 -300)" fill="none" stroke="#fff" stroke-width="54" clip-path="url(#capcut-clip)">
+                  <path d="M590 476 L60 201 V164 Q60 127 97 127 H408 Q445 127 445 164 V200"/>
+                  <path d="M590 124 L60 399 V436 Q60 473 97 473 H408 Q445 473 445 436 V400"/>
+                </g>
+              </svg>
               <span class="visually-hidden">CapCut</span>
             </li>
           </ul>
