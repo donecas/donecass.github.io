@@ -1,5 +1,8 @@
 :root {
-  --bg: #c9d1db;
+  /* Cor base por seção: branco (topo) → cinza (vídeos) → marrom (about, tom da referência) */
+  --bg-top: #f3f2f0;
+  --bg-mid: #b9b8b6;
+  --bg-end: #4a3f38;
   --text: #14161a;
   --muted: #3d424a;
   --gold: #d4a43a;
@@ -42,7 +45,10 @@ a, button {
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* O gradiente cobre a página inteira; as paradas caem aproximadamente em cada seção */
+  background: linear-gradient(to bottom, var(--bg-top) 0%, var(--bg-top) 22%, var(--bg-mid) 42%, var(--bg-mid) 56%, var(--bg-end) 78%, var(--bg-end) 100%);
+  background-color: var(--bg-end); /* página mais curta que a tela: o resto fica marrom, sem repetir o gradiente */
+  background-repeat: no-repeat;
   color: var(--text);
   font-family: "Poppins", system-ui, sans-serif;
   line-height: 1.5;
@@ -350,6 +356,8 @@ h2, h3, p { margin: 0; }
 }
 
 /* Bloco final: about + contato, em vidro como as outras seções */
+.closing.glass { background: rgb(255 255 255 / 0.45); } /* sobre o marrom o vidro escurece; mais branco mantém o texto legível */
+
 .closing {
   display: grid;
   gap: 2rem;
@@ -447,12 +455,12 @@ h2, h3, p { margin: 0; }
 
 /* Transparência reduzida: vidro vira superfície quase sólida */
 @media (prefers-reduced-transparency: reduce) {
-  .glass { background: rgb(255 255 255 / 0.92); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .glass, .closing.glass { background: rgb(255 255 255 / 0.92); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .contact { background: #fff; box-shadow: none; }
 }
 
 /* Contraste alto: superfícies sólidas com borda definida */
 @media (prefers-contrast: more) {
-  .glass, .contact { background: #fff; border-color: var(--text); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .glass, .closing.glass, .contact { background: #fff; border-color: var(--text); -webkit-backdrop-filter: none; backdrop-filter: none; }
   :is(.hero__text p, .carousel__subtitle) { color: var(--text); }
 }

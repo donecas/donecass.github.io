@@ -185,3 +185,4 @@ Sem framework de testes (site estático pequeno). Verificação manual antes de 
 - **Ferramentas:** ícones dos apps no lugar dos nomes: Premiere Pro, After Effects, CapCut (DaVinci removido). O ícone do CapCut é desenhado à mão (não existe no simple-icons).
 - **About:** em vidro como as outras seções (sem faixa cáqui sólida); texto escuro.
 - **Fundo por seção:** cada seção tem a própria faixa de cor borrada atrás (topo: rosé + dourado; vídeos: azul + oliva; about: dourado-cáqui + rosé).
+- **Cor base por seção (v2.2):** gradiente vertical na página: branco `#F3F2F0` (topo) → cinza `#B9B8B6` (vídeos) → marrom `#4A3F38` (about, tom da referência). As manchas de cor de cada seção continuam por cima. O vidro do about é mais branco (45%) para o texto escuro manter contraste sobre o marrom (medido: 7.2:1).
