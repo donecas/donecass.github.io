@@ -275,7 +275,14 @@ h2, h3, p { margin: 0; }
   list-style: none;
   counter-reset: item;
   touch-action: pan-y; /* deslizar na horizontal é do carrossel; na vertical, da página */
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 400ms var(--ease-out);
 }
+
+.carousel__track.is-dragging { transition: none; cursor: grabbing; }
+.carousel__track.is-dragging .carousel__item { transition: none; }
+.carousel__item .media { -webkit-user-drag: none; }
 
 .carousel__item {
   --x: 0%;
@@ -409,6 +416,31 @@ h2, h3, p { margin: 0; }
 
 .contact__title { font-size: 1rem; font-weight: 500; }
 
+.contact { position: relative; }
+
+/* Brilho extra num pseudo-elemento: anima só opacidade, não a sombra */
+.contact::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 0.9), 0 0 4rem rgb(255 255 255 / 0.8);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Espera a rolagem suave chegar (~450ms) e pulsa uma vez */
+.contact.is-highlighted { animation: contact-pulse 700ms var(--ease-out) 450ms; }
+.contact.is-highlighted::after { animation: contact-glow 1100ms ease 450ms; }
+
+@keyframes contact-pulse {
+  40% { transform: scale(1.035); }
+}
+
+@keyframes contact-glow {
+  30% { opacity: 1; }
+}
+
 @media (min-width: 640px) {
   .closing { grid-template-columns: 1fr 1.1fr; }
   .about { justify-items: start; text-align: left; }
@@ -441,6 +473,10 @@ h2, h3, p { margin: 0; }
   transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out);
 }
 
+/* Entrada das seções: sobe 16px e aparece, uma vez */
+.reveal-ready .glass:not(.is-visible) { opacity: 0; transform: translateY(16px); }
+.reveal-ready .glass { transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+
 /* Hover só onde existe mouse (no toque ele "gruda" depois do tap) */
 @media (hover: hover) and (pointer: fine) {
   .socials__link:hover { background: rgb(0 0 0 / 0.06); }
@@ -451,6 +487,9 @@ h2, h3, p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   .carousel__item, .carousel__arrow, .socials__link, .button, .button svg { transition-property: opacity, background-color, filter; }
   .toast, .toast.is-visible { transform: translate(-50%, 0); transition-property: opacity; }
+  .reveal-ready .glass:not(.is-visible) { transform: none; }
+  .carousel__track { transition: none; }
+  .contact.is-highlighted { animation: none; }
 }
 
 /* Transparência reduzida: vidro vira superfície quase sólida */
