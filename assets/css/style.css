@@ -2,7 +2,6 @@
   --bg: #c9d1db;
   --text: #14161a;
   --muted: #3d424a;
-  --khaki: #6f6758;
   --gold: #d4a43a;
 
   /* Material de vidro */
@@ -14,7 +13,7 @@
   --radius-lg: 2rem;
   --radius-md: 1.25rem;
   --gutter: 16px;
-  --page-width: 42rem;
+  --page-width: 54rem;
   --section-gap: clamp(2.5rem, 8vw, 4.5rem);
   --card-pad: clamp(1.25rem, 4vw, 2rem);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -49,18 +48,46 @@ body {
   line-height: 1.5;
 }
 
-/* Fundo de cores borradas: é o que o vidro deixa ver. Estático. */
-body::before {
+/* Faixas de cor: cada seção tem o próprio fundo borrado, que o vidro deixa ver. Estático.
+   Raios em % da faixa: a cor some antes da borda, sem linha de corte. */
+/* A faixa ocupa a largura toda da página; só os cards dentro dela têm largura máxima */
+.band {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 1rem;
+}
+
+.band > * { width: min(100% - 2 * var(--gutter), var(--page-width)); }
+
+.band::before {
   content: "";
-  position: fixed;
-  inset: 0;
+  position: absolute;
   z-index: -1;
+  top: calc(var(--section-gap) / -2 - 3rem);
+  bottom: calc(var(--section-gap) / -2 - 3rem);
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.band--top::before {
   background:
-    radial-gradient(30rem 26rem at 32% 10%, rgb(196 120 128 / 0.8), transparent 70%),
-    radial-gradient(28rem 24rem at 72% 34%, rgb(212 164 58 / 0.7), transparent 70%),
-    radial-gradient(32rem 28rem at 28% 62%, rgb(110 140 170 / 0.75), transparent 70%),
-    radial-gradient(30rem 26rem at 74% 88%, rgb(133 124 108 / 0.8), transparent 70%),
-    var(--bg);
+    radial-gradient(28rem 50% at 30% 48%, rgb(196 120 128 / 0.9), transparent 70%),
+    radial-gradient(28rem 48% at 70% 54%, rgb(212 164 58 / 0.9), transparent 70%);
+}
+
+.band--work::before {
+  background:
+    radial-gradient(28rem 50% at 28% 50%, rgb(90 130 160 / 0.9), transparent 70%),
+    radial-gradient(28rem 48% at 72% 50%, rgb(120 128 96 / 0.9), transparent 70%);
+}
+
+.band--about::before {
+  background:
+    radial-gradient(28rem 50% at 70% 50%, rgb(176 150 90 / 0.9), transparent 70%),
+    radial-gradient(28rem 48% at 28% 52%, rgb(150 110 120 / 0.9), transparent 70%);
 }
 
 a { color: inherit; }
@@ -80,15 +107,13 @@ h2, h3, p { margin: 0; }
 
 /* Coluna central */
 .page {
-  width: min(100% - 2 * var(--gutter), var(--page-width));
-  margin: calc(var(--gutter) + env(safe-area-inset-top, 0px)) auto calc(var(--section-gap) + env(safe-area-inset-bottom, 0px));
+  padding: calc(var(--gutter) + env(safe-area-inset-top, 0px)) 0 calc(var(--section-gap) + env(safe-area-inset-bottom, 0px));
 }
 
 .sections {
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* o trilho do carrossel não alarga a coluna */
   gap: var(--section-gap);
-  margin-top: 1rem;
 }
 
 /* Vidro: translúcido, borda clara (luz na borda), sombra suave */
@@ -180,7 +205,7 @@ h2, h3, p { margin: 0; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(1rem, 5vw, 1.75rem);
-  width: min(100%, 17rem);
+  width: min(100%, 22rem);
   margin: 0 auto;
 }
 
@@ -218,12 +243,12 @@ h2, h3, p { margin: 0; }
 .button:active { transform: scale(0.97); }
 
 @media (min-width: 640px) {
-  .hero { grid-template-columns: 1fr 1fr; }
+  .hero { grid-template-columns: 1.15fr 1fr; }
 }
 
 /* "Videos i made": carrossel */
 .work {
-  --item-w: clamp(7rem, 34vw, 10rem);
+  --item-w: clamp(9rem, 40vw, 14rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
@@ -235,38 +260,64 @@ h2, h3, p { margin: 0; }
 
 .carousel { position: relative; }
 
+/* Todos os itens empilhados no mesmo lugar; o JS diz a posição (data-pos) e o CSS move */
 .carousel__track {
-  position: relative;
-  display: flex;
-  gap: 0.25rem;
+  display: grid;
+  justify-content: center;
   margin: 0;
-  padding: 0.5rem calc(50% - var(--item-w) / 2) 0.25rem;
-  overflow-x: auto;
-  overscroll-behavior-x: contain; /* não dispara o "voltar" do navegador ao chegar na ponta */
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  padding: 0.5rem 0 0.25rem;
   list-style: none;
+  counter-reset: item;
+  touch-action: pan-y; /* deslizar na horizontal é do carrossel; na vertical, da página */
 }
-
-.carousel__track::-webkit-scrollbar { display: none; }
 
 .carousel__item {
-  flex: 0 0 var(--item-w);
-  scroll-snap-align: center;
+  --x: 0%;
+  --s: 1;
+  position: relative;
+  grid-area: 1 / 1;
+  width: var(--item-w);
   text-align: center;
   cursor: pointer;
-  transition: transform 250ms var(--ease-out), opacity 250ms var(--ease-out);
+  counter-increment: item;
+  transform: translateX(var(--x)) scale(var(--s));
+  transition: transform 400ms var(--ease-out), opacity 300ms ease;
 }
 
-.carousel__item .media { box-shadow: 0 14px 30px rgb(20 22 26 / 0.25); }
+/* Número de teste no canto do vídeo */
+.carousel__item::before {
+  content: counter(item);
+  position: absolute;
+  top: 0.625rem;
+  left: 0.625rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.carousel__item .media { box-shadow: 0 14px 30px rgb(20 22 26 / 0.25); transition: filter 300ms ease; }
 
 .carousel__title, .carousel__subtitle { overflow-wrap: anywhere; }
 .carousel__title { margin-top: 0.875rem; font-size: 0.9375rem; font-weight: 500; }
 .carousel__subtitle { margin-top: 0.125rem; color: var(--muted); text-transform: none; letter-spacing: 0.02em; }
 
-/* Só com JS: item central em destaque */
-.carousel.is-ready .carousel__item:not(.is-active) { transform: scale(0.72); opacity: 0.7; }
-.carousel.is-ready .carousel__item:not(.is-active) :is(.carousel__title, .carousel__subtitle) { visibility: hidden; }
+/* Só com JS: meio em destaque, laterais menores e borradas, o resto escondido */
+.carousel.is-loop .carousel__item:not([data-pos="0"]) { --s: 0.72; opacity: 0.75; }
+.carousel.is-loop .carousel__item:not([data-pos="0"]) .media { filter: blur(3px); } /* só o vídeo borra; o número fica legível */
+.carousel.is-loop .carousel__item:not([data-pos="0"]) :is(.carousel__title, .carousel__subtitle) { visibility: hidden; }
+.carousel.is-loop .carousel__item[data-pos="0"] { z-index: 1; }
+.carousel.is-loop .carousel__item[data-pos="-1"] { --x: -92%; }
+.carousel.is-loop .carousel__item[data-pos="1"] { --x: 92%; }
+.carousel.is-loop .carousel__item[data-pos="-2"] { --x: -160%; opacity: 0; pointer-events: none; }
+.carousel.is-loop .carousel__item[data-pos="2"] { --x: 160%; opacity: 0; pointer-events: none; }
+.carousel__item.no-anim { transition: none; }
 
 .carousel__arrow {
   position: absolute;
@@ -290,21 +341,19 @@ h2, h3, p { margin: 0; }
 .carousel__arrow:active:not(:disabled) { transform: scale(0.94); }
 .carousel__arrow:disabled { opacity: 0.3; cursor: default; }
 
+.carousel:not(.is-loop) .carousel__track { display: flex; gap: 1rem; justify-content: flex-start; overflow-x: auto; padding-inline: 1rem; }
+.carousel:not(.is-loop) .carousel__item { flex: none; }
+
 /* Em tela de toque se desliza com o dedo; setas só atrapalham */
 @media (hover: none) and (pointer: coarse) {
   .carousel__arrow { display: none; }
 }
 
-/* Bloco final: faixa cáqui sólida com about + contato */
+/* Bloco final: about + contato, em vidro como as outras seções */
 .closing {
   display: grid;
   gap: 2rem;
   align-items: center;
-  padding: clamp(1.75rem, 6vw, 2.75rem) var(--card-pad);
-  border-radius: var(--radius-lg);
-  background: var(--khaki);
-  color: #fff;
-  box-shadow: var(--glass-shadow);
 }
 
 .about { display: grid; gap: 1rem; justify-items: center; text-align: center; }
@@ -312,10 +361,10 @@ h2, h3, p { margin: 0; }
 .about__photo {
   width: 8.5rem;
   height: 8.5rem;
-  border: 3px solid rgb(255 255 255 / 0.6);
+  border: 3px solid rgb(255 255 255 / 0.7);
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+  box-shadow: 0 10px 30px rgb(20 22 26 / 0.25);
 }
 
 .about p { font-size: 0.9375rem; }
@@ -324,30 +373,28 @@ h2, h3, p { margin: 0; }
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.tools li {
-  padding: 0.375rem 0.875rem;
-  border: 1px solid rgb(255 255 255 / 0.35);
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.14); /* escurece o cáqui: branco claro aqui ficava abaixo de 4.5:1 */
-  font-size: 0.8125rem;
-  font-weight: 500;
+.tools__icon {
+  display: block;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 6px 16px rgb(20 22 26 / 0.2);
 }
 
-/* Card claro sobre o cáqui, com brilho em volta (sem blur: atrás dele é cor sólida) */
 .contact {
   display: grid;
   gap: 0.75rem;
   padding: 1.5rem 1.25rem;
   border: 1px solid rgb(255 255 255 / 0.7);
   border-radius: var(--radius-lg);
-  background: rgb(255 255 255 / 0.88);
-  box-shadow: 0 0 3.5rem rgb(255 255 255 / 0.35);
+  background: rgb(255 255 255 / 0.8);
+  box-shadow: 0 0 3.5rem rgb(255 255 255 / 0.55);
   color: var(--text);
   text-align: center;
 }
@@ -394,7 +441,7 @@ h2, h3, p { margin: 0; }
 
 /* Movimento reduzido: sem deslocamento, só troca de opacidade/cor */
 @media (prefers-reduced-motion: reduce) {
-  .carousel__item, .carousel__arrow, .socials__link, .button, .button svg { transition-property: opacity, background-color; }
+  .carousel__item, .carousel__arrow, .socials__link, .button, .button svg { transition-property: opacity, background-color, filter; }
   .toast, .toast.is-visible { transform: translate(-50%, 0); transition-property: opacity; }
 }
 
@@ -408,5 +455,4 @@ h2, h3, p { margin: 0; }
 @media (prefers-contrast: more) {
   .glass, .contact { background: #fff; border-color: var(--text); -webkit-backdrop-filter: none; backdrop-filter: none; }
   :is(.hero__text p, .carousel__subtitle) { color: var(--text); }
-  .tools li { background: none; border-color: #fff; }
 }

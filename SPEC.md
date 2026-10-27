@@ -177,3 +177,11 @@ Sem framework de testes (site estático pequeno). Verificação manual antes de 
 - **Domínio:** `donecass.com` (confirmado).
 - **Logo:** o `Donecas.svg` enviado tem o texto "Donecas" em Montserrat Bold como *texto vivo* (não convertido em curvas), num fundo branco de 1440×810. Usado como `<img>`, ele perderia a fonte e viria com uma caixa branca enorme. Então o logo é feito em HTML: `<h1 class="logo">Donecas</h1>` com Montserrat 700 via Google Fonts, que dá o mesmo visual e fica nítido em qualquer tela. Se quiser usar o arquivo, exporte de novo com o texto convertido em curvas (Inkscape: *Caminho → Objeto para caminho*), sem o fundo e recortado ao conteúdo.
 - **Mídias:** até você mandar os vídeos e os posters, o site usa placeholders coloridos como no mockup.
+
+## v2.1 — Ajustes pedidos depois da v2
+- **Tamanhos:** coluna de 54 rem; Antes/Depois até 22 rem de largura; vídeo central do carrossel com `clamp(9rem, 40vw, 14rem)`.
+- **Carrossel infinito:** 3 itens visíveis, o ativo no meio e os 2 vizinhos menores e borrados. Depois do último vem o primeiro (e vice-versa). Começa no item 1. Navega com setas, teclado (← →), deslize (> 40 px) ou clique num vizinho. Com exatamente 3 itens, o item que troca de lado pula sem animação.
+- **Números de teste:** cada item mostra seu número (contador CSS em `.carousel__item::before`). Remover quando entrarem os vídeos reais.
+- **Ferramentas:** ícones dos apps no lugar dos nomes: Premiere Pro, After Effects, CapCut (DaVinci removido). O ícone do CapCut é desenhado à mão (não existe no simple-icons).
+- **About:** em vidro como as outras seções (sem faixa cáqui sólida); texto escuro.
+- **Fundo por seção:** cada seção tem a própria faixa de cor borrada atrás (topo: rosé + dourado; vídeos: azul + oliva; about: dourado-cáqui + rosé).

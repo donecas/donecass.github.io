@@ -1,5 +1,3 @@
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 /* Discord: copia o usuário e avisa */
 const toast = document.querySelector('.toast');
 let toastTimer;
@@ -24,27 +22,29 @@ document.querySelectorAll('[data-copy]').forEach((button) => {
   });
 });
 
-/* Carrossel */
+/* Carrossel infinito: 3 visíveis, o ativo no meio; depois do último vem o primeiro */
 document.querySelectorAll('.carousel').forEach((carousel) => {
   const track = carousel.querySelector('.carousel__track');
   const items = [...track.children];
+  const n = items.length;
   const prev = carousel.querySelector('.carousel__arrow--prev');
   const next = carousel.querySelector('.carousel__arrow--next');
-  let active = -1;
+  let active = 0;
 
-  function scrollToItem(i, behavior = reduceMotion ? 'auto' : 'smooth') {
-    const item = items[Math.max(0, Math.min(i, items.length - 1))];
-    track.scrollTo({ left: item.offsetLeft - (track.clientWidth - item.offsetWidth) / 2, behavior });
-  }
-
-  function setActive(i) {
-    if (i === active) return;
-    active = i;
+  // Posição de cada item em relação ao ativo: -1 esquerda, 0 meio, 1 direita, ±2 escondido daquele lado
+  function render() {
     items.forEach((item, j) => {
-      const isActive = j === i;
+      let rel = (j - active + n) % n;
+      if (rel > n / 2) rel -= n;
+      const pos = Math.max(-2, Math.min(2, rel));
+      const isActive = pos === 0;
       const video = item.querySelector('video');
+      // Troca de lado (ex.: esquerda → direita): pula sem animar, senão cruza por trás do item do meio
+      if (item.dataset.pos !== undefined && Math.abs(pos - item.dataset.pos) > 1) item.classList.add('no-anim');
+      item.dataset.pos = pos;
       item.classList.toggle('is-active', isActive);
       item.toggleAttribute('aria-current', isActive);
+      item.setAttribute('aria-hidden', String(Math.abs(pos) > 1));
       if (!video) return;
       if (isActive) {
         video.play().catch(() => {}); // sem src ainda, ou o navegador bloqueou: fica no poster
@@ -54,39 +54,48 @@ document.querySelectorAll('.carousel').forEach((carousel) => {
         video.controls = false;
       }
     });
-    prev.disabled = i === 0;
-    next.disabled = i === items.length - 1;
+    track.offsetWidth; // aplica as posições sem animação antes de religar as transições
+    items.forEach((item) => item.classList.remove('no-anim'));
   }
 
-  // O item ativo é o mais próximo do centro do trilho
-  function updateActive() {
-    const center = track.scrollLeft + track.clientWidth / 2;
-    let best = 0;
-    items.forEach((item, j) => {
-      const dist = Math.abs(item.offsetLeft + item.offsetWidth / 2 - center);
-      const bestDist = Math.abs(items[best].offsetLeft + items[best].offsetWidth / 2 - center);
-      if (dist < bestDist) best = j;
-    });
-    setActive(best);
+  function go(step) {
+    active = (active + step + n) % n;
+    render();
   }
 
-  track.addEventListener('scroll', updateActive, { passive: true });
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
 
-  prev.addEventListener('click', () => scrollToItem(active - 1));
-  next.addEventListener('click', () => scrollToItem(active + 1));
-
-  // Teclado é repetitivo: troca instantânea, sem animação
   track.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') scrollToItem(active - 1, 'auto');
-    else if (e.key === 'ArrowRight') scrollToItem(active + 1, 'auto');
+    if (e.key === 'ArrowLeft') go(-1);
+    else if (e.key === 'ArrowRight') go(1);
     else return;
     e.preventDefault();
   });
 
+  // Deslizar o dedo (ou arrastar o mouse) troca de vídeo
+  let startX = null;
+  let swiped = false;
+  track.addEventListener('pointerdown', (e) => { startX = e.clientX; swiped = false; });
+  track.addEventListener('pointerup', (e) => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 40 && n > 1) {
+      swiped = true;
+      go(dx < 0 ? 1 : -1);
+    }
+  });
+  track.addEventListener('pointercancel', () => { startX = null; });
+
   // Clique num vizinho traz ao centro; clique no ativo liga o som
   items.forEach((item, j) => {
     item.addEventListener('click', () => {
-      if (j !== active) return scrollToItem(j);
+      if (swiped) return;
+      if (j !== active) {
+        active = j;
+        return render();
+      }
       const video = item.querySelector('video');
       if (video && video.muted) {
         video.muted = false;
@@ -96,9 +105,7 @@ document.querySelectorAll('.carousel').forEach((carousel) => {
     });
   });
 
-  prev.hidden = next.hidden = items.length < 2;
-  carousel.classList.add('is-ready');
-  const start = Math.floor(items.length / 2);
-  scrollToItem(start, 'auto');
-  setActive(start);
+  prev.hidden = next.hidden = n < 2;
+  carousel.classList.add('is-loop'); // classe nova: um main.js antigo em cache não ativa este layout
+  render();
 });
