@@ -39,3 +39,28 @@ Tudo mexe nos mesmos 3 arquivos, então a ordem é sequencial; não vale paralel
 | Vídeos pesados deixam o site lento | `preload="none"` + `poster`; só o item central carrega/toca; limite de 15 MB por vídeo |
 | GitHub Pages servindo a pasta errada | Conferir em Settings → Pages: branch `main`, pasta `/ (root)` |
 | Carrossel com 1 ou 2 itens quebra o layout | Testar com 1, 2 e 5 itens na tarefa 6 |
+
+---
+
+# Plano v2: Overhaul glass
+
+Base: seção "v2" do [SPEC.md](../SPEC.md). Mesmos 3 arquivos (`index.html`, `style.css`, `main.js`), mais a foto. Sem dependências novas.
+
+## Ordem
+1. **Fundação:** fundo de cores borradas + material de vidro (tokens) + espaçamento novo + remoção da nav. Tudo depende disso.
+2. **Header + Hero:** o hero é a primeira impressão e tem o layout novo (vídeos | texto + CTA).
+3. **"Videos i made":** só título e sombras; o JS do carrossel não muda.
+4. **Bloco final:** foto, about, chips de ferramentas e card de contato com brilho.
+5. **Verificação + publicação.**
+
+## Checkpoints
+- **Depois da 1–2:** prints em 375 e 1440 px. O vidro precisa mostrar o fundo através dele. Se não mostrar, ajustar cores/opacidade antes de seguir.
+- **Depois da 4:** contraste do texto branco no cáqui medido, e não estimado.
+
+## Riscos
+| Risco | Como evitar |
+|---|---|
+| `backdrop-filter` pesado em celular fraco | ≤ 6 superfícies com blur; fundo fixo sem animação |
+| Vidro "some" sobre fundo liso | Os blobs de cor ficam atrás de todos os cards; confirmar no print |
+| Texto ilegível sobre vidro | Texto quase preto, peso 500, fallback com `prefers-reduced-transparency` |
+| Foto pesada (2556×3408) | Recorte quadrado 480×480, JPEG ~60 KB, `loading="lazy"` |

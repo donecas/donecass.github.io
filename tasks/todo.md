@@ -41,3 +41,32 @@ Verificação local de todas: `python -m http.server 8000` → http://localhost:
   - Acceptance: `meta description`, tags Open Graph (preview ao mandar o link), favicon; Lighthouse mobile com Performance ≥ 85, Accessibility ≥ 95 e Best Practices ≥ 95; GitHub Pages configurado (`main`, `/ (root)`) com HTTPS em `donecass.com`.
   - Verify: Lighthouse; abrir https://donecass.com num celular de verdade.
   - Files: `index.html`, `assets/img/favicon.svg`
+
+---
+
+# Tarefas v2: Overhaul glass
+
+- [x] **9. Fundação: fundo, vidro e espaçamento**
+  - Acceptance: nav removida (HTML, CSS e `scroll-margin`); fundo fixo com blobs de cor (azul-acinzentado, dourado, cáqui, rosé); classe de vidro (branco ~40%, `blur(24px) saturate(160%)`, borda branca 1 px a ~40%, raio 1.75–2 rem); espaço entre seções `clamp(2.5rem, 8vw, 4.5rem)`; fallbacks para `prefers-reduced-transparency` e `prefers-contrast: more`.
+  - Verify: prints em 375 e 1440 px; o fundo aparece borrado através dos cards.
+  - Files: `index.html`, `assets/css/style.css`
+
+- [x] **10. Header + Hero**
+  - Acceptance: header em vidro (logo + ícones); hero em card separado (sem vidro sobre vidro) com Antes/Depois e, ao lado, título "Edits that keep people watching", texto e botão preto "Work with me →" que rola até `#contact`; lado a lado a partir de 640 px e empilhado abaixo; o botão encolhe ao toque.
+  - Verify: prints em 320, 640 e 1440 px; clicar no botão.
+  - Files: `index.html`, `assets/css/style.css`
+
+- [x] **11. "Videos i made"**
+  - Acceptance: título visível "Videos i made" (substitui o `h2` escondido); sombra suave nos vídeos; o carrossel funciona igual (setas, teclado, só o central toca).
+  - Verify: o teste do carrossel da v1 de novo.
+  - Files: `index.html`, `assets/css/style.css`
+
+- [x] **12. Bloco final: About + ferramentas + contato**
+  - Acceptance: faixa cáqui escura `#6F6758`; foto redonda (recortada em 480×480, `assets/img/donecas.jpg`, com `alt`); texto about; chips de ferramentas (Premiere Pro, After Effects, DaVinci Resolve, CapCut); card de vidro claro "Wanna try? Contact me" com os 3 ícones e brilho em volta; foto + about ao lado do contato a partir de 640 px; texto branco com contraste ≥ 4.5:1 medido.
+  - Verify: prints; cálculo de contraste; Discord ainda copia.
+  - Files: `index.html`, `assets/css/style.css`, `assets/img/donecas.jpg`
+
+- [ ] **13. Verificação e publicação**
+  - Acceptance: sem rolagem horizontal nas 7 larguras; Lighthouse mobile ≥ 85 / 95 / 95; legível com transparência reduzida (emulado); commit + push só com o seu ok.
+  - Verify: teste de larguras + Lighthouse + abrir donecass.com.
+  - Files: —

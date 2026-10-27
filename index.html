@@ -34,14 +34,8 @@
     </symbol>
   </svg>
 
-  <nav class="nav" aria-label="Main">
-    <a href="#contact">Contact</a>
-    <a href="#work">Work</a>
-    <a href="#about">About</a>
-  </nav>
-
   <div class="page">
-    <header class="header card card--solid">
+    <header class="header glass">
       <h1 class="logo">Donecas</h1>
       <ul class="socials">
         <li><a class="socials__link" href="https://x.com/Donecass" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg aria-hidden="true"><use href="#icon-x"/></svg></a></li>
@@ -50,10 +44,9 @@
       </ul>
     </header>
 
-    <main>
-      <section class="compare card" aria-label="Before and after">
-        <p class="compare__phrase">Catchphrase</p>
-        <div class="compare__grid">
+    <main class="sections">
+      <section class="hero glass" aria-labelledby="hero-title">
+        <div class="compare">
           <!-- Coloque o vídeo em src="assets/video/before.mp4" e a capa em poster="assets/img/before.jpg" -->
           <figure class="compare__item">
             <video class="media" muted loop playsinline autoplay></video>
@@ -64,10 +57,18 @@
             <figcaption>After</figcaption>
           </figure>
         </div>
+        <div class="hero__text">
+          <h2 id="hero-title" class="hero__title">Edits that keep people watching</h2>
+          <p>I edit short-form videos for creators — hooks, pacing, captions and sound, ready to post.</p>
+          <a class="button" href="#contact">
+            Work with me
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m-6-6 6 6-6 6"/></svg>
+          </a>
+        </div>
       </section>
 
-      <section id="work" class="work card" aria-labelledby="work-title">
-        <h2 id="work-title" class="visually-hidden">Work</h2>
+      <section id="work" class="work glass" aria-labelledby="work-title">
+        <h2 id="work-title" class="section-title">Videos i made</h2>
         <div class="carousel">
           <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Previous video" hidden>‹</button>
           <!-- Cada <li> é um trabalho: src do vídeo, poster, título e @ do cliente -->
@@ -101,21 +102,32 @@
           <button class="carousel__arrow carousel__arrow--next" type="button" aria-label="Next video" hidden>›</button>
         </div>
       </section>
-      <section id="about" class="about card">
-        <h2 class="about__title">About</h2>
-        <!-- Texto provisório: troque pelo seu -->
-        <p>I'm Donecas, a video editor focused on short-form vertical content. I turn raw footage into edits that keep people watching.</p>
+
+      <section id="about" class="closing" aria-labelledby="about-title">
+        <div class="about">
+          <img class="about__photo" src="assets/img/donecas.jpg" alt="Donecas, in profile, reflected in a gold-framed mirror" width="480" height="480" loading="lazy">
+          <h2 id="about-title" class="visually-hidden">About</h2>
+          <!-- Texto provisório: troque pelo seu -->
+          <p>I'm Donecas, a video editor focused on short-form vertical content. I turn raw footage into edits that keep people watching.</p>
+          <!-- Lista provisória: troque pelas ferramentas que você usa -->
+          <ul class="tools" aria-label="Tools I use">
+            <li>Premiere Pro</li>
+            <li>After Effects</li>
+            <li>DaVinci Resolve</li>
+            <li>CapCut</li>
+          </ul>
+        </div>
+
+        <div id="contact" class="contact">
+          <h2 class="contact__title">Wanna try? Contact me</h2>
+          <ul class="socials socials--large">
+            <li><a class="socials__link" href="https://x.com/Donecass" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg aria-hidden="true"><use href="#icon-x"/></svg></a></li>
+            <li><a class="socials__link" href="mailto:certifieddonecas@gmail.com" aria-label="Email"><svg aria-hidden="true"><use href="#icon-mail"/></svg></a></li>
+            <li><button class="socials__link" type="button" data-copy="donecass" aria-label="Copy Discord username"><svg aria-hidden="true"><use href="#icon-discord"/></svg></button></li>
+          </ul>
+        </div>
       </section>
     </main>
-
-    <footer id="contact" class="contact">
-      <p class="contact__title">Wanna try? Contact me</p>
-      <ul class="socials socials--large">
-        <li><a class="socials__link" href="https://x.com/Donecass" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg aria-hidden="true"><use href="#icon-x"/></svg></a></li>
-        <li><a class="socials__link" href="mailto:certifieddonecas@gmail.com" aria-label="Email"><svg aria-hidden="true"><use href="#icon-mail"/></svg></a></li>
-        <li><button class="socials__link" type="button" data-copy="donecass" aria-label="Copy Discord username"><svg aria-hidden="true"><use href="#icon-discord"/></svg></button></li>
-      </ul>
-    </footer>
   </div>
 
   <p class="toast" role="status" aria-live="polite"></p>
