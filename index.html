@@ -11,11 +11,10 @@
   <meta property="og:title" content="Donecas — Video Editor">
   <meta property="og:description" content="Short-form video editing. See before/after edits and recent work.">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/css/style.css?v=6">
-  <script src="assets/js/main.js?v=6" defer></script>
+  <!-- Só arquivos do próprio site: bloqueia scripts, estilos e fontes de fora (GitHub Pages não deixa mandar cabeçalhos) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+  <link rel="stylesheet" href="assets/css/style.css?v=8">
+  <script src="assets/js/main.js?v=8" defer></script>
 </head>
 <body>
   <!-- Ícones usados no header e no rodapé -->
@@ -59,8 +58,8 @@
           </figure>
         </div>
         <div class="hero__text">
-          <h2 id="hero-title" class="hero__title">Edits that keep people watching</h2>
-          <p>I edit short-form videos for creators — hooks, pacing, captions and sound, ready to post.</p>
+          <h2 id="hero-title" class="hero__title">Good ideas deserve good visuals.</h2>
+          <p>Videos designed to keep viewers watching and make brands stand out.</p>
           <a class="button" href="#contact">
             Work with me
             <svg aria-hidden="true" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h16m-6-6 6 6-6 6"/></svg>
@@ -71,7 +70,7 @@
 
       <div class="band band--work">
       <section id="work" class="work glass" aria-labelledby="work-title">
-        <h2 id="work-title" class="section-title">Videos i made</h2>
+        <h2 id="work-title" class="section-title">Featured work</h2>
         <div class="carousel">
           <button class="carousel__arrow carousel__arrow--prev" type="button" aria-label="Previous video" hidden>‹</button>
           <!-- Cada <li> é um trabalho: src do vídeo, poster, título e @ do cliente -->
@@ -113,7 +112,7 @@
           <img class="about__photo" src="assets/img/donecas.jpg" alt="Donecas, in profile, reflected in a gold-framed mirror" width="480" height="480" loading="lazy">
           <h2 id="about-title" class="visually-hidden">About</h2>
           <!-- Texto provisório: troque pelo seu -->
-          <p>I'm Donecas, a video editor focused on short-form vertical content. I turn raw footage into edits that keep people watching.</p>
+          <p>I’m Donecas, a video editor focused on short-form vertical content. I’m always exploring creative ideas and innovative editing techniques while staying up to date with what works in the industry.</p>
           <!-- Lista provisória: troque pelas ferramentas que você usa -->
           <ul class="tools" aria-label="Tools I use">
             <li title="Adobe Premiere Pro">

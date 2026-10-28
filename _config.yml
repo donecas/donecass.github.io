@@ -1,0 +1,4 @@
+# GitHub Pages (Jekyll): não publicar documentos internos do projeto
+exclude:
+  - SPEC.md
+  - tasks

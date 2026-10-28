@@ -134,6 +134,9 @@ document.querySelectorAll('.carousel').forEach((carousel) => {
     });
   });
 
+  // Título e @ podem ser cortados (2 linhas / "…"): o texto inteiro aparece ao passar o mouse
+  carousel.querySelectorAll('.carousel__title, .carousel__subtitle').forEach((el) => { el.title = el.textContent; });
+
   prev.hidden = next.hidden = n < 2;
   carousel.classList.add('is-loop'); // classe nova: um main.js antigo em cache não ativa este layout
   render();
